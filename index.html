@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casual Connections</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #000000, #000000);
+            color: #333;
+            text-align: center;
+            overflow: hidden;
+            -webkit-user-select: none; /* Disable text selection for WebKit browsers */
+            -moz-user-select: none; /* Disable text selection for Firefox */
+            -ms-user-select: none; /* Disable text selection for IE */
+            user-select: none; /* Disable text selection for modern browsers */
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000;
+            z-index: 999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            flex-direction: column;
+        }
+
+        .dot-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dot {
+            width: 15px;
+            height: 15px;
+            margin: 0 5px;
+            background-color: #007BFF; /* Blue color for the dots */
+            border-radius: 50%;
+            animation: pulse 1.2s infinite;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .loading-message {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                visibility: visible;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        .loading.hidden {
+            animation: fadeOut 1s forwards ease-in-out;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            padding: 20px;
+            position: relative;
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .location {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e4e4e4;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 15%;
+        }
+
+        .square-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .square-gallery img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button {
+            margin-top: 20px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:active {
+            transform: scale(0.95);
+        }
+
+        .footer {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #f1f1f1;
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-button {
+                font-size: 1.5rem;
+                padding: 25px 60px;
+            }
+
+            .square-gallery {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="dot-container">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="loading-message">Please be patient, we're getting things ready...</div>
+    </div>
+
+    <div class="container" id="mainContent">
+        <h1>Find The Woman You Want In The Bottom Button</h1>
+        <div class="location" id="userLocation">Girls Nearby: <span style="color: #ffcc00;">Loading...</span></div>
+
+        <div class="square-gallery">
+            <img src="1.jpg" alt="Profile 1">
+            <img src="2.jpg" alt="Profile 2">
+            <img src="3.jpg" alt="Profile 3">
+            <img src="4.jpg" alt="Profile 4">
+        </div>
+
+        <button class="cta-button" onclick="redirectRandom()">Continue</button>
+        <div class="footer">Adult Only</div>
+    </div>
+
+    <script>
+        // Automatically fetch user's location based on IP address using ipinfo.io
+        fetch('https://ipinfo.io/json?token=YOUR_API_KEY')  // Replace with your ipinfo.io API token
+            .then(response => response.json())
+            .then(data => {
+                const city = data.city || 'Unknown City';
+                const country = data.country || 'Unknown Country';
+                document.getElementById('userLocation').innerHTML = `Girls Nearby: <span style="color: #ffcc00;">${city}</span>`;
+                setRedirectLink(country); // Call the function to set the redirect URL based on country
+            })
+            .catch(error => {
+                console.error("Error fetching location:", error);  // Log error if there is an issue
+                document.getElementById('userLocation').innerHTML = 'Girls Nearby: <span style="color: #ffcc00;">Unable to fetch location</span>';
+            });
+
+        // Set redirect URL based on the country
+        function setRedirectLink(country) {
+            const links = {
+                'ID': 'https://www.youtube.com',  // Indonesia
+                'BR': 'https://www.youtube.com',  // Brazil
+                'EG': 'https://www.youtube.com',  // Egypt
+                'IN': 'https://www.youtube.com'   // India
+            };
+
+            document.querySelector('.cta-button').setAttribute('onclick', `redirectRandom('${country}')`);
+        }
+
+        // Redirect to a random link or specific country page (like Google or YouTube)
+        function redirectRandom(country = '') {
+            const randomLinks = [
+                'https://xtwphrh.mysweet-contactstimes.com/g2t2cdv?t=NARUTO&cid=FORTUNER',
+                'https://vnanxl.llovesgreat.com/?utm_source=da57dc555e50572d&&ban=inst&j1=1&s1=226805&s2=2083622&s3=NARUTO&click_id=INNOVA'
+            ];
+
+            let link = '';
+
+            if (['ID', 'BR', 'EG', 'IN'].includes(country)) {
+                link = 'https://www.youtube.com'; // Redirect to YouTube for the specified countries
+            } else {
+                link = randomLinks[Math.floor(Math.random() * randomLinks.length)];
+            }
+
+            window.open(link, '_blank');
+        }
+
+        // Hide loading and show content after delay
+        setTimeout(() => {
+            document.getElementById('loading').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('mainContent').style.opacity = 1;
+            }, 1000); // Fade-in duration for main content
+        }, 3000); // Keep the loading animation running for 3 seconds
+
+        // Disable right-click (context menu)
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // Disable text selection
+        document.addEventListener('selectstart', (e) => e.preventDefault());
+
+        // Disable copy event
+        document.body.oncopy = function() { return false; };
+    </script>
+</body>
+</html>
